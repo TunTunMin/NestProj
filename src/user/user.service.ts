@@ -6,26 +6,31 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entity/user.entity';
 @Injectable()
 export class UserService {
-    constructor(@InjectRepository(User)
-    private userRepository: Repository<User>
-    ){ }
-    get(): Promise<User[]>{
-        return this.userRepository.find();
-    }
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
+  get(): Promise<User[]> {
+    return this.userRepository.find();
+  }
 
-    create(createUserDto: CreateUserDto){
-        return this.userRepository.save(createUserDto);
-    }
+  create(createUserDto: CreateUserDto) {
+    return this.userRepository.save(createUserDto);
+  }
 
-    update(updateUserDto: UpdateUserDto, userId : number){
-        return {body: updateUserDto, userId}
-    }
+  update(updateUserDto: UpdateUserDto, userId: number) {
+    return this.userRepository.update(userId, updateUserDto);
+  }
 
-    show(userId: number){
-        return {userId};
-    }
+  show(id: number) {
+    return this.userRepository.findOneBy({ id });
+  }
 
-    delete(userId: number){
-        return {userId};
-    }
+  findByEmail(email: string) {
+    return this.userRepository.findOne({ where: { email } });
+  }
+
+  delete(userId: number) {
+    return this.userRepository.delete(userId);
+  }
 }
